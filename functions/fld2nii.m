@@ -1,4 +1,4 @@
-function varargout = fld2nii(file)
+function varargout = fld2nii(file,varargin)
 %FLD2NII converts .fld field data from HFSS to .nii.gz files
 % output nifti format:  dim4: 
 %                       1: real x    2: imaginary x
@@ -26,23 +26,27 @@ CScorrection = [min(coordinates(:,1)),min(coordinates(:,2)),min(coordinates(:,3)
 
 idx = int32((coordinates - CScorrection)+1);
 
+columns = size(Import.data,2)-3;
 for i = 1:length(idx)
-    fields(idx(i,1),idx(i,2),idx(i,3),1) = field(i,1);
-    fields(idx(i,1),idx(i,2),idx(i,3),2) = field(i,2);
-    fields(idx(i,1),idx(i,2),idx(i,3),3) = field(i,3);
-    fields(idx(i,1),idx(i,2),idx(i,3),4) = field(i,4);
-    fields(idx(i,1),idx(i,2),idx(i,3),5) = field(i,5);
-    fields(idx(i,1),idx(i,2),idx(i,3),6) = field(i,6);
+    for c = 1:columns
+        fields(idx(i,1),idx(i,2),idx(i,3),c) = field(i,c);
+    end
 end
-
-niftiwrite(fields,strcat(name,'.nii'));
 
 if nargout == 1
     varargout{1} = complex(fields(:,:,:,[1,3,5]),fields(:,:,:,[2,4,6]));
 end
 
-gzip(strcat(name,'.nii'))
-delete(strcat(name,'.nii'))
+if any(strcmp(varargin, 'notsave'))
+else
+    niftiwrite(fields,strcat(name,'.nii'));
+    gzip(strcat(name,'.nii'))
+    delete(strcat(name,'.nii'))
+end
+
 fclose all;
-%delete(file)
+if any(strcmp(varargin, 'delete'))
+    delete(file)
+end
+
 end
