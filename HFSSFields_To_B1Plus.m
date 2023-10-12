@@ -32,6 +32,7 @@ else
     par_eval = 0;
 end
 
+%% Convert Files to B1+ =================================================
 fprintf('Converting %g files to B1Plus\n',numel(fileList))
 
 if par_eval
