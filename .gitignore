@@ -1,0 +1,7 @@
+*.asv
+*.nii
+*.gz
+*.fld
+*.txt
+
+/TEST
