@@ -9,8 +9,12 @@ function varargout = fld2nii(file,varargin)
 %                       1: complex x
 %                       2: complex y
 %                       3: complex z
+%
+% Varargin:
+%                       'notsave' will not save a .nii.gz
+%                       'delete'  will delete the original file
 
-[~,name,~] = fileparts(file);
+[path,name,~] = fileparts(file);
 
 Import = importdata(file);
 
@@ -39,9 +43,9 @@ end
 
 if any(strcmp(varargin, 'notsave'))
 else
-    niftiwrite(fields,strcat(name,'.nii'));
-    gzip(strcat(name,'.nii'))
-    delete(strcat(name,'.nii'))
+    niftiwrite(fields,strcat(path,'\',name,'.nii'));
+    gzip(strcat(path,'\',name,'.nii'))
+    delete(strcat(path,'\',name,'.nii'))
 end
 
 fclose all;
