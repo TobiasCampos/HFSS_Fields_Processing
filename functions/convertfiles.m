@@ -1,9 +1,10 @@
 function convertfiles(varargin)
 %CONVERTFILES converts .fld to .nii.gz files
 % Varargin:
-%                       {1}: directory of files to be converted
+%                       varargin{1}: directory of files to be converted
 %                       'delete'  will delete the original file
 %                       'Parallel' will enter a parfor to call fld2nii
+%                       'B1plus' converts the files containing 'B-field' to B1plus
 
 
 if nargin == 0
@@ -45,5 +46,9 @@ if any(strcmp(varargin, 'delete'))
         delete(files{i});
     end
 end
+
+%if any(strcmp(varargin, 'B1plus'))
+%any(contains('H:\ExportData\Fields\uSTTT_111-TMM3_Phantom\TMM3_5.08_B-field.nii', 'B-field'))
+%end %Automatically convert the files that cointain B-field to B1Plus.
 
 end
