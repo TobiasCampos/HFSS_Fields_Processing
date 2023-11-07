@@ -1,40 +1,47 @@
-function varargout = B1plus(varargin)
+function varargout = B1plus(file, varargin)
 %B1PLUS Calculates B1+ from B<x,y,z> nii.gz file
 % Varargin:
-%                       varargin{1}: fullfile to be converted
+%                       'B0','+z' Give the direction of the B0 field
+%                       '.gz' compresses the file
 
-if nargin == 0
-    [file,path] = uigetfile('*.nii.gz','Select files','H:\ExportData\Fields','MultiSelect','on');
-    file = fullfile(path,file);
-    [path,name,~] = fileparts(file);
-else
-    file = varargin{1};
-    [path,name,~] = fileparts(file);
+[path,name,ext] = fileparts(file);
+
+if ext == ".gz"
+    niifile = gunzip(file);
+    field = niftiread(niifile{1});
+    delete(niifile{1});
+elseif ext == ".nii"
+    field = niftiread(file);
 end
-
-if isequal(name,0)
-    disp('User Cancelled');
-    return
-end
-
-niifile = gunzip(file);
-field = niftiread(niifile{1});
-delete(niifile{1});
 
 field = complex(field(:,:,:,[1,3,5]),field(:,:,:,[2,4,6]));
-
-B1plus = (field(:,:,:,1) - (1i * field(:,:,:,2)))/sqrt(2);
-B1plusMag = abs(B1plus) .* 1E6; % T uo uT
-
-if nargout == 1
-    varargout{1} = B1plusMag;
-elseif nargout == 2
-    varargout{1} = B1plusMag;
-    varargout{2} = B1plus;
+if any(strcmp(varargin, 'B0'))
+    B0 = varargin{find(strcmp(varargin, 'B0'))+1};
+else
+    B0 = '+z';
 end
 
-niftiwrite(B1plusMag,strcat(path,'\',name,'_B1plusMag','.nii'));
-gzip(strcat(path,'\',name,'_B1plusMag','.nii'));
-delete(strcat(path,'\',name,'_B1plusMag','.nii'));
+switch B0
+    case '+z'
+        B1plus = (field(:,:,:,1) - (1i * field(:,:,:,2)))/sqrt(2);  %B0 in +z
+    case '+x'
+        B1plus = (field(:,:,:,2) - (1i * field(:,:,:,3)))/sqrt(2);  %B0 in +x
+    otherwise
+        error('invalid B0 Direction')
+end
+
+B1p(:,:,:,1) = abs(B1plus)   .* 1E6; % T uo uT
+
+if nargout == 1
+    B1p(:,:,:,2) = angle(B1plus);%Phase
+    varargout{1} = B1p;
+end
+
+niftiwrite(B1p,strcat(path,'\',name,'_B1plusMag','.nii'));
+
+if any(strcmp(varargin, '.gz'))
+    gzip(strcat(path,'\',name,'_B1plusMag','.nii'));
+    delete(strcat(path,'\',name,'_B1plusMag','.nii'));
+end
 
 end

@@ -3,11 +3,11 @@ function convertfiles(varargin)
 % Varargin:
 %                       varargin{1}: directory of files to be converted
 %                       'delete'  will delete the original file
-%                       'Parallel' will enter a parfor to call fld2nii
+%                       'parallel' will enter a parfor to call fld2nii
 %                       'B1plus' converts the files containing 'B-field' to B1plus
 
 
-if nargin == 0
+if nargin == 0 || varargin{1} == "parallel"
     [files,path] = uigetfile('*.fld','Select files','H:\ExportData\Fields','MultiSelect','on');
     files = fullfile(path,files);
 else

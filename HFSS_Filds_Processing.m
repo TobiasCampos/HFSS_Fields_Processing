@@ -18,3 +18,5 @@ clear; clc;
 % if ~exist(yourFolder, 'dir')
 %        mkdir(yourFolder)
 % end
+
+%https://uk.mathworks.com/help/matlab/ref/movefile.html
