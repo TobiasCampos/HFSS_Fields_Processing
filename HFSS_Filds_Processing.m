@@ -1,6 +1,6 @@
 clear; clc;
 
-[file,path] = uigetfile({'*.fld';'*.nii.gz'},'Select a file','C:\Documents\AppBuildingFiles\','MultiSelect','on');
+[file,path] = uigetfile({'*.nii';'*.nii.gz'},'Select a file','C:\Documents\AppBuildingFiles\','MultiSelect','on');
 
 
 % FileNames = uigetfile('*.mat','Select the tissue mesh file to open', 'MultiSelect', 'on');

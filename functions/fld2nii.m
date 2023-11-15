@@ -21,16 +21,16 @@ Import = importdata(file);
 field = Import.data(:,4:end);
 
 coordinates = Import.data(:,1:3).*1000; %m to mm
+columns = size(Import.data,2)-3;
 
 fields = zeros(floor((max(coordinates(:,1)) - min(coordinates(:,1))))+1, ...
                floor((max(coordinates(:,2)) - min(coordinates(:,2))))+1, ...
-               floor((max(coordinates(:,3)) - min(coordinates(:,3))))+1,3);
+               floor((max(coordinates(:,3)) - min(coordinates(:,3))))+1,ceil(columns/2));
 
 CScorrection = [min(coordinates(:,1)),min(coordinates(:,2)),min(coordinates(:,3))];
 
 idx = int32((coordinates - CScorrection)+1);
 
-columns = size(Import.data,2)-3;
 for i = 1:length(idx)
     for c = 1:columns
         fields(idx(i,1),idx(i,2),idx(i,3),c) = field(i,c);

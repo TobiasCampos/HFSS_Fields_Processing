@@ -1,4 +1,5 @@
 clear; close all; clc;
+% Creates phantom from local SAR output.
 
 [file,path] = uigetfile('*.fld','Select files','H:\ExportData\Fields','MultiSelect','on');
 file = fullfile(path,file);
@@ -23,10 +24,10 @@ end
 
 fields(fields ~= 0) = 1;
 
-
 [x, y, z] = ind2sub(size(fields), find(fields));
 xyz_Data=[x, y, z]+CScorrection;
 plot3(xyz_Data(:,1), xyz_Data(:,2), xyz_Data(:,3), '.');
 
 writematrix(xyz_Data./1000,'Headphantom.txt','delimiter',' ')
-niftiwrite(fields,'test.nii');
+changeextension('Headphantom.txt','.pts')
+%niftiwrite(fields,'test.nii');

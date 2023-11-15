@@ -17,11 +17,11 @@ else
     fprintf('%g Files selected\n',length(files));
     if parallel
         parfor i = 1:length(files)
-            B1plus(files{i});
+            B1plus(files{i},'B0','+z');
         end
     else
         for i = 1:length(files)
-            B1plus(files{i});
+            B1plus(files{i},'B0','+z');
         end
     end
 end
