@@ -3,7 +3,7 @@ cd('C:\Users\tobia\OneDrive - University of Pittsburgh\{PITT}\[Research]\Git Wor
 addpath functions\
 
 analysis_dir = uigetdir('H:\ExportData', 'Select a folder');
-analysis_dir = 'H:\ExportData\Ground_Test\Fields';
+%analysis_dir = 'H:\ExportData\Ground_Test\Fields';
 
 files = natsortfiles(dir(fullfile(analysis_dir, '\*.nii')));
 
@@ -12,7 +12,7 @@ for i = 1:length(files)
     substrate = files(i).name;
     idx = strfind(substrate,' ');
 
-    data{i,1} = substrate(1:idx(1)-1);
+    data{i,1} = substrate(1:idx(1)-3);
     data{i,2} = niftiread(strcat(files(i).folder,'\',files(i).name));
     % data{i,3} = mean(data{i,2},'all');
     % data{i,4} = max(data{i,2},[],'all');
@@ -52,21 +52,33 @@ DataTable = table(Name,Permittivity,Mean,Maximum);
 %     set(gca, 'Color','#212121') %'#292929'
 % end
 
+% x=1;
+% a = reshape (data{x,2},[numel(data{x,2}),1]);
+% a(a==0) = [];
+% edges = linspace(0,1,400);
+% [N1,edges1] = histcounts(a,edges);
+% 
+% y=8;
+% a = reshape (data{y,2},[numel(data{y,2}),1]);
+% a(a==0) = [];
+% edges = linspace(0,1,400);
+% [N2,edges2] = histcounts(a,edges);
+% 
+% b = bar(edges(1:end-1),(N1-N2),'BarWidth',1,'FaceColor','flat');
+% title(strrep(strcat(data{x,1}, '/', data{y,1}),'_',' '))
+% set(gcf, 'Color','#212121');    % Plot Color
+% set(gca, 'Color','#212121');    % Axis Color
+% 
+% cm = turbo(size(b.CData,1));
+% for c = 1:size(b.CData,1)
+%     b.CData(c,:) = cm(c,:);
+% end
+% 
 for i = 1:size(data,1)
-    a = reshape (data{i,2},[numel(data{i,2}),1]);
-    a(a==0) = [];
-    [N,edges] = histcounts(a,400);
-    figure
-    b = bar(edges(1:end-1),N,'BarWidth',1,'FaceColor','flat');
-    xline(mean(nonzeros(data{i,2}),'all'),'Color',adjust_color([0 0 0]),'LineWidth',1.5)
+    histcm(data{i,2},linspace(0,1,400))
     title(strrep(data{i,1},'_',' '))
-    set(gcf, 'Color','#212121');    % Plot Color
-    set(gca, 'Color','#212121');    % Axis Color
-
-    cm = turbo(size(b.CData,1));
-    for c = 1:size(b.CData,1)
-        b.CData(c,:) = cm(c,:);
-    end
+    xlabel('Field Intensity (uT)')
+    ylabel('Voxel Count')
 end
 
 %%
@@ -78,11 +90,11 @@ plot(str2double(DataTable.Name),DataTable.Mean,'--.','color',adjust_color([0 1 0
 % plot(Data5_08.Permittivity,Data5_08.Mean,'--.','color',adjust_color([1 0 0]),'LineWidth',1,'MarkerSize',20)
 hold off
 
-title('Phantom: MeanB1+ vs Trace Spacing')
-xlabel('Trace Spacing (mm)')
+title('Phantom: MeanB1+ vs Source Location')
+xlabel('Source Location (mm)')
 ylabel('Mean B1+ (uT)')
 %ylim([0.038 0.075])
-xlim(([4 28]))
+%xlim(([1 20]))
 set(gca, 'Color','#212121') %'#292929'
 set (gca, 'FontWeight', 'bold');
 grid on
@@ -97,10 +109,10 @@ hold on
 plot(str2double(DataTable.Name),DataTable.Maximum,'--.','color',adjust_color([1 0 0]),'LineWidth',1,'MarkerSize',15) %%
 hold off
 
-title('Phantom: MaxB1+ vs Trace Spacing')
-xlabel('Trace Spacing (mm)')
+title('Phantom: MaxB1+ vs Source Location')
+xlabel('Source Location (mm)')
 ylabel('Max B1+ (uT)')
-xlim(([4 28]))
+%xlim(([1 20]))
 set(gca, 'Color','#212121') %'#292929'
 set (gca, 'FontWeight', 'bold');
 grid on
