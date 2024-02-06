@@ -44,3 +44,5 @@ set(gca, 'Color','#212121') %'#292929'
 set (gca, 'FontWeight', 'bold');
 grid on
 grid minor
+
+%Calculate bandwidth

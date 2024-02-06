@@ -5,7 +5,7 @@ function convertfiles(varargin)
 %                       'delete'  will delete the original file
 %                       'parallel' will enter a parfor to call fld2nii
 %                       'B1plus' converts the files containing 'B-Field' to B1plus
-
+% convertfiles('H:\ExportData\RawData','parallel','delete')
 
 if nargin == 0 || varargin{1} == "parallel"
     [files,path] = uigetfile('*.fld','Select files','H:\ExportData\Fields','MultiSelect','on');
