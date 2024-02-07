@@ -2,10 +2,10 @@ clear; clc; close all;
 
 addpath functions\
 
-rootdir = input('enter fields directory',"s");
+rootdir = input('>>>Enter fields directory:',"s");
 
 if isempty(rootdir)
-    rootdir = 'H:\ExportData\Permittivity+Thickness Data_Optimization1';
+    rootdir = uigetdir('H:\ExportData', 'Select a folder');
 end
 
 A = [0.25 0.25 0.25 0.25];

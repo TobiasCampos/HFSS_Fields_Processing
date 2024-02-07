@@ -2,10 +2,10 @@ clear; clc; close all;
 
 addpath functions\
 
-rootdir = input('enter fields directory',"s");
+rootdir = input('>>>Enter fields directory:',"s");
 
 if isempty(rootdir)
-    rootdir = 'H:\ExportData\(tests)\FIELDS\ProcessedFields';
+    rootdir = uigetdir('H:\ExportData', 'Select a folder');
 end
 
 filelist = dir(fullfile(rootdir, '**\*.nii'));
@@ -20,15 +20,15 @@ for i = 1:length(filelist)
     idx = strfind(name,'_');
 
     if     any(contains(name,'_B1+'))
-        B1perW{a,1} = name(1:idx(1)-1);
+        B1perW{a,1} = name(1:idx(2)-1);
         B1perW{a,2} = niftiread(strcat(filelist(i).folder,'\',filelist(i).name));
         a = a+1;
     elseif any(contains(name,'_SAReff_'))
-        B1perSAR{b,1} = name(1:idx(1)-1);
+        B1perSAR{b,1} = name(1:idx(2)-1);
         B1perSAR{b,2} = niftiread(strcat(filelist(i).folder,'\',filelist(i).name));
         b = b+1;
     elseif any(contains(name,'_SAR_'))
-        SAR{c,1} = name(1:idx(1)-1);
+        SAR{c,1} = name(1:idx(2)-1);
         SAR{c,2} = niftiread(strcat(filelist(i).folder,'\',filelist(i).name));
         c = c+1;
     end
@@ -49,7 +49,7 @@ for c = 1:length(data)
     for i = 1:size(data{c},1)
         a = reshape (data{c}{i,2},[numel(data{c}{i,2}),1]);
         a(a==0) = [];
-        histogram(a,1000,'Normalization','pdf','DisplayStyle','stairs');
+        histogram(a,1000,'Normalization','count','DisplayStyle','stairs');
     end
     legend(data{c}{:,1})
     hold off

@@ -25,7 +25,7 @@ end
 
 csvfiles = dir(fullfile(rootdir,'**\*.csv')); % '*.nii' to not go into subfolders
 
-csvdir = strcat(rootdir,'\_RAW');
+csvdir = strcat(rootdir,'\_GZ');
 for i = 1:length(csvfiles)
     filename = csvfiles(i).name;
     idx = strfind(filename,delimiter);
@@ -41,7 +41,7 @@ end
 
 gzfiles = dir(fullfile(rootdir,'**\*.nii.gz')); % '*.nii' to not go into subfolders
 
-gzdir = strcat(rootdir,'\_RAW');
+gzdir = strcat(rootdir,'\_GZ');
 for i = 1:length(gzfiles)
     filename = gzfiles(i).name;
     idx = strfind(filename,delimiter);
