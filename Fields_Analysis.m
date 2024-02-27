@@ -2,7 +2,7 @@ clear; clc; close all;
 
 addpath functions\
 
-rootdir = input('>>>Enter fields directory:',"s");
+rootdir = input('>>> Enter fields directory:',"s");
 
 if isempty(rootdir)
     rootdir = uigetdir('H:\ExportData', 'Select a folder');
@@ -39,6 +39,7 @@ data{2} = B1perSAR(1:b-1,:);
 data{3} = SAR(1:c-1,:);
 Titles = ["B1+/Watt","B1+/SAR","SAR"];
 
+% Plot Histograms
 for c = 1:length(data)
     figure
     grid on
@@ -52,5 +53,41 @@ for c = 1:length(data)
         histogram(a,1000,'Normalization','count','DisplayStyle','stairs');
     end
     legend(data{c}{:,1})
+    hold off
+end
+
+% Plot Mean and Max B1
+for c = 1:length(data)
+    n = cell(size(data{c},1),1);
+    m = zeros(size(data{c},1),1);
+    o = m;
+    for i = 1:size(data{c},1)
+        n{i} = regexp(data{c}{i,1},'\d+\.?\d*','Match');
+        n{i} = n{i}(1);
+        m(i) = mean(nonzeros(data{c}{i,2}),"all");
+        o(i) = max(data{c}{i,2},[],"all");
+    end
+    b = cellfun(@(x)str2double(x), n);
+
+    figure
+    hold on
+    grid on
+    grid minor
+    title(Titles(c))
+    set(gca, 'Color','#212121') %'#292929'
+    plot(b,m,'g--.','MarkerSize',15)
+    legend('Mean');
+    xlim([(min(b) -1) (max(b) +1)])
+    hold off
+
+    figure
+    hold on
+    grid on
+    grid minor
+    title(Titles(c))
+    set(gca, 'Color','#212121') %'#292929'
+    plot(b,o,'r--.','MarkerSize',15)
+    legend('Max');
+    xlim([(min(b) -1) (max(b) +1)])
     hold off
 end

@@ -8,7 +8,7 @@ function sortfilestofolders(rootdir,delimiter,n)
 % If the identifier name is shared they go to the same folder.
 fprintf('Sorting Files\n');
 
-niifiles = dir(fullfile(rootdir,'**\*.nii')); % '*.nii' to not go into subfolders
+niifiles = dir(fullfile(rootdir,'**\*.nii')); % '**.nii' to go into subfolders
 
 niidir = strcat(rootdir,'\AnalysisFields');
 for i = 1:length(niifiles)
@@ -23,7 +23,7 @@ for i = 1:length(niifiles)
     movefile(niifile,strcat(niidir,'\',folder));
 end
 
-csvfiles = dir(fullfile(rootdir,'**\*.csv')); % '*.nii' to not go into subfolders
+csvfiles = dir(fullfile(rootdir,'**\*.csv')); % '**.csv' to go into subfolders
 
 csvdir = strcat(rootdir,'\_GZ');
 for i = 1:length(csvfiles)
@@ -39,7 +39,7 @@ for i = 1:length(csvfiles)
     movefile(csvfile,strcat(csvdir,'\',folder));
 end
 
-gzfiles = dir(fullfile(rootdir,'**\*.nii.gz')); % '*.nii' to not go into subfolders
+gzfiles = dir(fullfile(rootdir,'**\*.nii.gz')); % '**.nii.gz' to go into subfolders
 
 gzdir = strcat(rootdir,'\_GZ');
 for i = 1:length(gzfiles)

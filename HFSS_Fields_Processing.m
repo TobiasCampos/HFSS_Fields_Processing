@@ -2,7 +2,7 @@ clear; clc; close all;
 
 addpath functions\
 
-rootdir = input('>>>Enter fields directory:',"s");
+rootdir = input('>>> Enter fields directory:',"s");
 
 if isempty(rootdir)
     rootdir = uigetdir('H:\ExportData', 'Select a folder');
@@ -11,8 +11,8 @@ end
 A = [0.25 0.25 0.25 0.25];
 phi = [0 90 180 270];
 
-sig = niftiread("H:\PersonalLib\Geometry Properties\Phantom material properties\sig(phantom).nii");
-mu = niftiread("H:\PersonalLib\Geometry Properties\Phantom material properties\mu(phantom).nii");
+sig = niftiread("H:\PersonalLib\Geometry Properties\SphereProperties\sig(Sphere).nii");
+mu = niftiread("H:\PersonalLib\Geometry Properties\SphereProperties\mu(Sphere).nii");
 
 allfiles = dir(rootdir);
 folderNames = {allfiles([allfiles.isdir]).name};
@@ -23,7 +23,7 @@ if not(isfolder(strcat(rootdir,'\ProcessedFields')))
 end
 
 for i = 1:length(folderNames)
-fprintf('%g Files Remaining\n',(length(folderNames)-i));
+fprintf('%g Files Remaining\n',(length(folderNames)-(i-1)));
 
 %natsortfiles?
 folder = strcat(rootdir,'\',folderNames{i});
@@ -34,7 +34,7 @@ field = combinefields(fields,A,phi);
 field = mu.*field; % H -> B
 
 B1plus = (field(:,:,:,1) - (1i * field(:,:,:,2)))/sqrt(2);
-B1p(:,:,:,1) = abs(B1plus) .* 1E6;  % Complex magnitude T uo uT
+B1p(:,:,:,1) = abs(B1plus) .* 1E6;  % Complex magnitude T => uT
 B1p(:,:,:,2) = angle(B1plus);       % Phase
 
 meanB1 = mean(nonzeros(B1p(:,:,:,1)),"all");
@@ -69,8 +69,8 @@ SAReff(SAReff == inf)=0;
 
 meanSAReff = mean(nonzeros(SAReff(:,:,:,1)),"all");
 
-name = sprintf('%s_SAReffvoxelwise_mean-%g',folderNames{i},meanSAReff);
-niftiwrite(SAReff,strcat(rootdir,'\ProcessedFields\',name,'.nii'));
+% name = sprintf('%s_SAReffvoxelwise_mean-%g',folderNames{i},meanSAReff);
+% niftiwrite(SAReff,strcat(rootdir,'\ProcessedFields\',name,'.nii'));
 
 % B1/sqrt(Average SAR)
 

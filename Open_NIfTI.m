@@ -1,8 +1,8 @@
-clear; clc; close all;
+clear; clc;
 
 %addpath functions\
 
-rootdir = input('>>>Enter fields directory:',"s");
+rootdir = input('>>> Enter fields directory:',"s");
 
 if isempty(rootdir)
     rootdir = uigetdir('H:\ExportData', 'Select a folder');

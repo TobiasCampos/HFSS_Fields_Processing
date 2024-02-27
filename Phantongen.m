@@ -4,7 +4,7 @@ addpath functions\
 
 [file,path] = uigetfile('*.fld','Select files','H:\ExportData\Fields','MultiSelect','on');
 file = fullfile(path,file);
-fprintf('Files selected: %s\n',file);
+fprintf('File selected: %s\n',file);
 
 Import = importdata(file);
 
@@ -29,7 +29,7 @@ for i = 1:length(idx)
 end
 
 %remove panel:
-fields(1:140,50:190,130:300) = 0;
+% fields(1:140,50:190,130:300) = 0;
 
 fields(fields ~= 0) = 1;
 
@@ -43,10 +43,10 @@ xyz_Data = xyz_Data./1000;
 fprintf('saving\n');
 niftiwrite(fields,'test.nii');
 
-fileID = fopen(strcat(path,'Headphantom.txt'),'w');
+fileID = fopen(strcat(path,'Spherephantom.txt'),'w');
 fprintf(fileID,'%g %g %g\n',xyz_Data');
 fclose(fileID);
 % writematrix(xyz_Data./1000,'Headphantom.txt','delimiter',' ')
-changeextension(strcat(path,'Headphantom.txt'),'.pts');
+changeextension(strcat(path,'Spherephantom.txt'),'.pts');
 
 fprintf('done\n');
